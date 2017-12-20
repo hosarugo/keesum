@@ -1,0 +1,52 @@
+<div class="content">
+  <div class="location-filter-bar">
+    <div class="location-filter-wrap">
+      <div class="search">
+
+        <div class="search">
+          <%= form_tag(locations_path, :method => "get", id: "search-form", class: "input-filter-bar") do %>
+          <%= text_field_tag :search, params[:search], placeholder: "Search",class: "location-search text-center" %>
+          <% end %>
+        </div>
+        <% if params[:in].present? %>
+        <% data_default = params[:in] + " to "+ params[:out] %>
+        <% else data_default = "" end %>
+
+
+      </div>
+      <input type="text" id="flatpickr-user" class="input-filter-bar text-center" placeholder="Pick a date" data-default-date="<%= data_default %>">
+    </div>
+  </div>
+
+<div class="cards-container">
+  <div class="row-index-show" style="height: 80vh; overflow-y: auto" >
+    <% @location.each do |l| %>
+    <div class="col-xs-12 col-sm-6 col-md-4" >
+      <% if params[:in].present? %>
+      <a  href="<%= location_path(l.id) + '?in=' + params[:in] + '&out=' + params[:out]  %>">
+        <% else %>
+        <a href="<%= location_path(l.id) %>" class="link-to-location">
+          <% end %>
+          <div class="blog-card spring-fever Hover" id="<%= l.id %>" style="background-image: url('<%= cl_image_path l.photos[0].path %>')">
+          <div class="title-content">
+            <h3><%= l.name %></h3>
+            <hr class="card-hr">
+            <!--  <div class="intro">Yllamco laboris nisi ut aliquip ex ea commodo.</div> -->
+          </div>
+        </div>
+        <div class="blog-card-footer">
+            <div class="utility-info">
+              <ul class="utility-list">
+                <p><%= l.capacity %> spaces</p>
+                <p><%= number_to_currency(l.rate_by_week, :unit => "", precision: 0) %>€ / week</p>
+              </ul>
+            </div><!-- /.utility-info -->
+          </div>
+      </a>
+    </div>
+
+    <% end %>
+  </div>
+  <div id="map" style="height: 80vh"></div>
+
+</div>
